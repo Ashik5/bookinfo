@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {Trash2,User,X,Star} from "lucide-react";
+import { Trash2, User, X, Star } from "lucide-react";
 import { api } from "~/trpc/react";
 
 interface Book {
@@ -14,31 +14,38 @@ interface Book {
 
 interface User {
   id?: string;
-  name?: string | null;  
-  email?: string | null; 
-  image?: string | null; 
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
 }
+
 function SavedBook({ userData }: { userData: User | undefined }) {
-  const [savedBooks, setSavedBooks] = useState<Book[]>([]);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-
-  const {data} = api.book.getUserBooks.useQuery({ userId: userData?.id || "" });
-  const removeBookMutation = api.book.deleteUserBook.useMutation();
-
-  useEffect(() => {
-    if (data) {
-      setSavedBooks(data.books.map(book => ({
-        ...book,
-        coverImage: book.coverImage || '',
-        description: book.description || '',
-        publishedDate: book.publishedDate || ''
-      })));
+  const { data: booksData, isLoading, refetch } = api.book.getUserBooks.useQuery(
+    { userId: userData?.id || "" },
+    {
+      enabled: !!userData?.id,
+      staleTime: 0,
     }
-  }, []);
-  const handleDelete = (id: string) => {
-    removeBookMutation.mutate({ userId: userData?.id || "", bookId:id });
-    setSavedBooks(savedBooks.filter((book) => book.id !== id));
+  );
+
+  const removeBookMutation = api.book.deleteUserBook.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const handleDelete = async (id: string) => {
+    try {
+      await removeBookMutation.mutateAsync({
+        userId: userData?.id || "",
+        bookId: id,
+      });
+    } catch (error) {
+      console.error("Error deleting book:", error);
+    }
   };
+
   const BookDetailsModal = ({
     book,
     onClose,
@@ -101,58 +108,67 @@ function SavedBook({ userData }: { userData: User | undefined }) {
     </div>
   );
 
+  const books = booksData?.books.map(book => ({
+    ...book,
+    coverImage: book.coverImage || '',
+    description: book.description || '',
+    publishedDate: book.publishedDate || ''
+  })) || [];
+
   return (
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Saved Books */}
-        {savedBooks.length > 0 && (
-          <div>
-            <h2 className="mb-4 text-xl font-bold text-gray-900">
-              Saved Books
-            </h2>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {savedBooks.map((book) => (
-                <div
-                  key={book.id}
-                  className="cursor-pointer rounded-lg bg-white p-4 shadow-sm"
-                  onClick={() => setSelectedBook(book)}
-                >
-                  <div className="flex gap-4">
-                    <img
-                      src={book.coverImage}
-                      alt={book.title}
-                      className="h-32 w-24 rounded-lg object-cover shadow-sm"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-900">{book.title}</h3>
-                      <p className="mb-2 text-sm text-gray-600">
-                        {book.authors[0]}
-                      </p>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(book.id);
-                        }}
-                        className="inline-flex items-center px-2 py-1 text-sm text-red-600 hover:text-red-700 focus:outline-none"
-                      >
-                        <Trash2 className="mr-1 h-4 w-4" />
-                        Remove
-                      </button>
-                    </div>
+    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      {isLoading ? (
+        <div className="text-center">Loading...</div>
+      ) : books.length > 0 ? (
+        <div>
+          <h2 className="mb-4 text-xl font-bold text-gray-900">
+            Saved Books
+          </h2>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {books.map((book) => (
+              <div
+                key={book.id}
+                className="cursor-pointer rounded-lg bg-white p-4 shadow-sm"
+                onClick={() => setSelectedBook(book)}
+              >
+                <div className="flex gap-4">
+                  <img
+                    src={book.coverImage}
+                    alt={book.title}
+                    className="h-32 w-24 rounded-lg object-cover shadow-sm"
+                  />
+                  <div className="flex-1">
+                    <h3 className="font-bold text-gray-900">{book.title}</h3>
+                    <p className="mb-2 text-sm text-gray-600">
+                      {book.authors[0]}
+                    </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(book.id);
+                      }}
+                      className="inline-flex items-center px-2 py-1 text-sm text-red-600 hover:text-red-700 focus:outline-none"
+                    >
+                      <Trash2 className="mr-1 h-4 w-4" />
+                      Remove
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+      ) : (
+        <div className="text-center text-gray-500">No saved books found</div>
+      )}
 
-        {/* Book Details Modal */}
-        {selectedBook && (
-          <BookDetailsModal
-            book={selectedBook}
-            onClose={() => setSelectedBook(null)}
-          />
-        )}
-      </main>
+      {selectedBook && (
+        <BookDetailsModal
+          book={selectedBook}
+          onClose={() => setSelectedBook(null)}
+        />
+      )}
+    </main>
   );
 }
 
