@@ -14,12 +14,11 @@ interface Book {
 
 interface User {
   id?: string;
-  name: string;
-  email: string;
-  image: string;
+  name?: string | null;  
+  email?: string | null; 
+  image?: string | null; 
 }
-
-function SavedBook({ userData }: { userData: User | null }) {
+function SavedBook({ userData }: { userData: User | undefined }) {
   const [savedBooks, setSavedBooks] = useState<Book[]>([]);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 

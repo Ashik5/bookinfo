@@ -6,7 +6,7 @@ export default async function SavedBookPage() {
     const session = await auth();
     return(
         <HydrateClient>
-            <SavedBook userData={session?.user??null}/>
+            <SavedBook userData={session?.user}/>
         </HydrateClient>
     )
 }
