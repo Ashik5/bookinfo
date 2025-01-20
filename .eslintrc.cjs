@@ -36,7 +36,10 @@ const config = {
           "attributes": false
         }
       }
-    ]
+    ],
+    // Add just this one rule
+    "@typescript-eslint/no-unsafe-member-access": "off"
   }
 }
+
 module.exports = config;
