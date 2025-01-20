@@ -1,29 +1,120 @@
-# Create T3 App
+# BookInfo - Your Personal Book Library 📚
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+BookInfo is a web application that allows users to search for books using the Google Books API and save them to their personal library. Built with the T3 Stack (Next.js, TypeScript, Tailwind CSS, tRPC) and featuring authentication through Discord and Google.
 
-## What's next? How do I make an app with this?
+## 🌐 Live Demo
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+Visit the live application at: [https://bookinfo.vercel.app/](https://bookinfo.vercel.app/)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## ✨ Features
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- OAuth authentication with Discord and Google
+- Search books using Google Books API
+- Save books to your personal library
+- Responsive design with Tailwind CSS
+- Full TypeScript support
+- Secure API handling with tRPC
+- SQLite database with Prisma ORM
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Prerequisites
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- Node.js 18+ installed
+- Git
+- SQLite (for local development)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### Installation
 
-## How do I deploy this?
+1. Clone the repository
+```bash
+git clone https://github.com/Ashik5/bookinfo.git
+cd bookinfo
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Set up environment variables
+Create a `.env` file in the root directory and add the following variables:
+
+```env
+# Next Auth
+AUTH_SECRET="your_auth_secret"
+
+# Discord OAuth
+AUTH_DISCORD_ID="your_discord_client_id"
+AUTH_DISCORD_SECRET="your_discord_client_secret"
+
+# Google OAuth
+GOOGLE_CLIENT_ID="your_google_client_id"
+GOOGLE_CLIENT_SECRET="your_google_client_secret"
+
+# Google Books API
+GOOGLE_BOOKS_API_KEY="your_google_books_api_key"
+
+# Database
+DATABASE_URL="file:./db.sqlite"
+```
+
+4. Set up the database
+```bash
+npx prisma db push
+```
+
+5. Run the development server
+```bash
+npm run dev
+```
+
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## 🔐 Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `AUTH_SECRET` | NextAuth.js secret key | Yes |
+| `AUTH_DISCORD_ID` | Discord OAuth client ID | Yes |
+| `AUTH_DISCORD_SECRET` | Discord OAuth client secret | Yes |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID | Yes |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | Yes |
+| `GOOGLE_BOOKS_API_KEY` | Google Books API key | Yes |
+| `DATABASE_URL` | SQLite database URL | Yes |
+
+## 🏗️ Implementation Overview
+
+### Tech Stack
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Authentication**: NextAuth.js
+- **API Layer**: tRPC
+- **Database**: SQLite with Prisma
+- **UI Components**: Lucide Icons, Geist Font
+
+### Architecture
+- Uses the T3 Stack architecture for full-stack type safety
+- Server-side rendering with Next.js App Router
+- API routes handled through tRPC for type-safe API calls
+- OAuth authentication flow with multiple providers
+- SQLite database for simple deployment and development
+
+## 🚀 Deployment
+
+The application is deployed on Vercel with automatic deployments from the main branch. To deploy your own version:
+
+1. Fork this repository
+2. Create a new project on Vercel
+3. Connect your forked repository
+4. Add the required environment variables in Vercel's dashboard
+5. Deploy!
+
+## 📝 License
+
+This project is open source and available under the MIT License.
+
+## 👨‍💻 Author
+
+[Ashik5](https://github.com/Ashik5)

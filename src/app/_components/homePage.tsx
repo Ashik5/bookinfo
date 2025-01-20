@@ -27,12 +27,13 @@ interface Book {
 
 interface User {
   id?: string;
-  name: string;
-  email: string;
-  image: string;
+  name?: string | null;  
+  email?: string | null; 
+  image?: string | null; 
 }
 
-function HomePage({ userData }: { userData: User | null }) {
+
+function HomePage({ userData }: { userData: User | undefined }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentBooks, setCurrentBooks] = useState<Book[]>([]);
   const [savedBooks, setSavedBooks] = useState<Book[]>([]);

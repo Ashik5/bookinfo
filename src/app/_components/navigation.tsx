@@ -12,12 +12,12 @@ import { redirect } from "next/navigation";
 
 interface User {
   id?: string;
-  name: string;
-  email: string;
-  image: string;
+  name?: string | null;  
+  email?: string | null; 
+  image?: string | null; 
 }
 
-function Navigation({ userData }: { userData: User | null }) {
+function Navigation({ userData }: { userData: User | undefined }) {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const user: User = {
@@ -43,7 +43,7 @@ function Navigation({ userData }: { userData: User | null }) {
                 className="flex items-center space-x-3 focus:outline-none"
               >
                 <img
-                  src={user.image}
+                  src={user.image || ""}
                   alt="User avatar"
                   className="h-8 w-8 rounded-full object-cover"
                 />
