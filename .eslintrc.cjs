@@ -37,7 +37,6 @@ const config = {
         }
       }
     ],
-    // Add just this one rule
     "@typescript-eslint/no-unsafe-member-access": "off"
   }
 }
