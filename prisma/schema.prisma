@@ -63,6 +63,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    books         Book[]
 }
 
 model VerificationToken {
@@ -71,4 +72,17 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+
+model Book {
+  id             String   @id @default(uuid())
+  title          String
+  authors        String   
+  description    String?
+  publishedDate  String?
+  coverImage     String?
+  userId         String   
+  user           User     @relation(fields: [userId], references: [id])
+  createdAt      DateTime @default(now())
 }
