@@ -34,7 +34,7 @@ function SavedBook({ userData }: { userData: User | undefined }) {
         publishedDate: book.publishedDate || ''
       })));
     }
-  }, [data]);
+  }, []);
   const handleDelete = (id: string) => {
     removeBookMutation.mutate({ userId: userData?.id || "", bookId:id });
     setSavedBooks(savedBooks.filter((book) => book.id !== id));
